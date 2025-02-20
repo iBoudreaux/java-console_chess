@@ -9,6 +9,7 @@ import chess.ChessException;
 import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
+import chess.ChessMatch.ChessMode;
 
 public class Program {
 
@@ -18,9 +19,19 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<>();
 
+		UI.clearScreen();
+		System.out.println("Welcome to this updated version of standard chess! This project now supports standard chess and chess 960.");
+		System.out.println("Pick a Mode (Standard/chess960): ");
+		ChessMode chessMode = UI.checkValidGameMode(sc);
+		chessMatch.setMode(chessMode);
+		System.out.println();
+		System.out.println("Mode is set to " + chessMode + "!");
+		System.out.println();
+		chessMatch.initializeGame();
+
 		while (! chessMatch.getCheckMate()) {
 			try {
-				UI.clearScreen();
+
 				UI.printMatch(chessMatch, captured);
 				System.out.println();
 				System.out.print("Source: ");

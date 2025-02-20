@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import chess.ChessMatch;
+import chess.ChessMatch.ChessMode;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import chess.Color;
@@ -50,6 +51,24 @@ public class UI {
 		}
 	}
 	
+	public static ChessMode checkValidGameMode (Scanner sc) {
+		String userInput = sc.nextLine();
+		try {
+			ChessMatch.ChessMode.valueOf(userInput.toUpperCase());
+
+			if (userInput.equalsIgnoreCase("standard")) {
+				return ChessMode.STANDARD;
+			} else if (userInput.equalsIgnoreCase("chess960")) {
+				return ChessMode.CHESS960;
+			}
+
+			throw new InputMismatchException("That isn't a valid game mode. Press 'enter' to reset the terminal, then enter either 'standard' or 'chess960'.");
+
+		} catch (IllegalArgumentException e) {
+			throw new InputMismatchException("That isn't a valid game mode. Press 'enter' to reset the terminal, then enter either 'standard' or 'chess960'.");
+		}
+	}
+
 	public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
 		printBoard(chessMatch.getPieces());
 		System.out.println();

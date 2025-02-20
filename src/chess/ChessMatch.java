@@ -13,8 +13,14 @@ import chess.pieces.Knight;
 import chess.pieces.Pawn;
 import chess.pieces.Queen;
 import chess.pieces.Rook;
+import chess.chess960.BoardSetup;
 
 public class ChessMatch {
+
+	public enum ChessMode {
+		STANDARD,
+		CHESS960
+	}
 
 	private int turn;
 	private Color currentPlayer;
@@ -23,6 +29,7 @@ public class ChessMatch {
 	private boolean checkMate;
 	private ChessPiece enPassantVulnerable;
 	private ChessPiece promoted;
+	private ChessMode mode;
 	
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
@@ -31,7 +38,15 @@ public class ChessMatch {
 		board = new Board(8, 8);
 		turn = 1;
 		currentPlayer = Color.WHITE;
-		initialSetup();
+		this.mode = ChessMode.STANDARD;
+	}
+
+	public ChessMode getMode() {
+		return mode;
+	}
+
+	public void setMode(ChessMode mode) {
+		this.mode = mode;
 	}
 	
 	public int getTurn() {
@@ -56,6 +71,11 @@ public class ChessMatch {
 	
 	public ChessPiece getPromoted() {
 		return promoted;
+	}
+
+	//initializes the game by calling the function to check the mode entered by user
+	public void initializeGame() {
+		setUpBoard(this.mode);
 	}
 	
 	public ChessPiece[][] getPieces() {
@@ -310,12 +330,26 @@ public class ChessMatch {
 		return true;
 	}	
 	
-	private void placeNewPiece(char column, int row, ChessPiece piece) {
+	public void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
 		piecesOnTheBoard.add(piece);
+
+	}
+
+	//Board is set up based on the mode chosen by the user.
+	//Standard mode is a set up in the tradiitonal way and the method for how that's done is below this one.
+	//Chess 960 is a mode in chess/chess960/BoardSetup.java
+	private void setUpBoard(ChessMode mode) {
+		if (mode == ChessMode.STANDARD) {
+			standardChessSetUp();
+		}
+		else {
+			BoardSetup boardSetup = new BoardSetup(board, this);
+			boardSetup.chess960SetUp();
+		}
 	}
 	
-	private void initialSetup() {
+	private void standardChessSetUp() {
         placeNewPiece('a', 1, new Rook(board, Color.WHITE));
         placeNewPiece('b', 1, new Knight(board, Color.WHITE));
         placeNewPiece('c', 1, new Bishop(board, Color.WHITE));
