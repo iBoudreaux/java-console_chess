@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 import chess.ChessException;
 import chess.ChessMatch;
+import chess.ChessMatch.ChessMode;
 import chess.ChessPiece;
 import chess.ChessPosition;
-import chess.ChessMatch.ChessMode;
 
 public class Program {
 
@@ -62,11 +62,7 @@ public class Program {
 					chessMatch.replacePromotedPiece(type);
 				}
 			} 
-			catch (ChessException e) {
-				System.out.println(e.getMessage());
-				sc.nextLine();
-			}
-			catch (InputMismatchException e) {
+			catch (ChessException | InputMismatchException e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();
 			}
